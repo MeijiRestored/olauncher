@@ -1,0 +1,52 @@
+From 8a2558e206f95cc8dbf13d90e9a485cac58ae5f7 Mon Sep 17 00:00:00 2001
+From: MeijiRestored <42336759+MeijiRestored@users.noreply.github.com>
+Date: Wed, 5 Mar 2025 18:06:12 +0100
+Subject: [PATCH] fix duplicate libraries
+
+
+diff --git a/src/main/java/net/minecraft/launcher/updater/CompleteMinecraftVersion.java b/src/main/java/net/minecraft/launcher/updater/CompleteMinecraftVersion.java
+index 7df3cd1..dc4df98 100644
+--- a/src/main/java/net/minecraft/launcher/updater/CompleteMinecraftVersion.java
++++ b/src/main/java/net/minecraft/launcher/updater/CompleteMinecraftVersion.java
+@@ -25,6 +25,8 @@ import java.util.List;
+ import java.util.Map;
+ import java.util.Set;
+ import java.util.Map.Entry;
++import java.util.Collections;
++import java.util.HashMap;
+ 
+ import dev.figboot.olauncher.launcher.JavaVersionInfo;
+ import lombok.Getter;
+@@ -182,19 +183,19 @@ public class CompleteMinecraftVersion implements CompleteVersion {
+     }
+ 
+     public Collection<File> getClassPath(OperatingSystem var1, File var2, CompatibilityRule.FeatureMatcher var3) {
+-        Collection var4 = this.getRelevantLibraries(var3);
+-        ArrayList var5 = new ArrayList();
+-        Iterator var6 = var4.iterator();
+-
+-        while(var6.hasNext()) {
+-            Library var7 = (Library)var6.next();
+-            if (var7.getNatives() == null) {
+-                var5.add(new File(var2, "libraries/" + var7.getArtifactPath()));
++        // olauncher start - fix duplicate libraries
++        ArrayList<Library> relevantLibraries = (ArrayList<Library>) this.getRelevantLibraries(var3);
++        Collections.reverse(relevantLibraries);
++        HashMap<String, File> dedupedFiles = new HashMap<>();
++        for (Library library : relevantLibraries) {
++            if (library.getNatives() == null) {
++                String name = library.getName().substring(0, library.getName().lastIndexOf(":"));
++                dedupedFiles.put(name, new File(var2, "libraries/" + library.getArtifactPath()));
+             }
+         }
+-
+-        var5.add(new File(var2, "versions/" + this.getJar() + "/" + this.getJar() + ".jar"));
+-        return var5;
++        dedupedFiles.put(this.getJar(), new File(var2, "versions/" + this.getJar() + "/" + this.getJar() + ".jar"));
++        return dedupedFiles.values();
++        // olauncher end
+     }
+ 
+     public Set<String> getRequiredFiles(OperatingSystem var1) {
+-- 
+2.48.1
