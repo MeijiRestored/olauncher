@@ -1,3 +1,8 @@
+# Fork Info
+This is not a revival project, I am only trying to keep it working for my own use. There will not be any new features, only breaking bugs that render the program unusable will be fixed.
+
+The news website will be kept up-to-date.
+
 # Project Status
 This project is on indefinite hiatus. Check the forks tab to see if anyone is maintaining a fork of this project. I have relicensed olauncher as CC0 with the consent of the contributors, so you are free to distribute any forks with whatever license you see fit.
 
@@ -5,7 +10,7 @@ This project is on indefinite hiatus. Check the forks tab to see if anyone is ma
 The old launcher we all know and love with the quality-of-life features of the new launcher. This aims to support java 8 through modern java.
 
 ## How to use
-1. Go to the [latest release](https://github.com/olauncher/olauncher/releases/latest)
+1. Go to the [latest release](https://github.com/MeijiRestored/olauncher/releases/latest)
 2. Download the `olauncher-xxx-redist.jar` file
 3. Run it
 
